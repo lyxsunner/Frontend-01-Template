@@ -1,0 +1,20 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "test.js",
+    "devDependencies": {
+      "babel-cli": "^6.26.0",
+      "babel-core": "^6.26.3",
+      "babel-eslint": "^8.0.1",
+      "babel-preset-env": "^1.7.0"
+    },
+    "scripts": {
+      "test":"node test/test.js",
+      "start": "node browser/server/server.js",
+      "toy": "node browser/client/client.js"
+    },
+    "dependencies": {},
+    "author": "",
+    "license": "ISC"
+  }

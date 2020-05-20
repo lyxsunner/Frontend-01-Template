@@ -1,0 +1,50 @@
+Arguments: 
+  D:\Work Program\node-v12.11.1-win-x64\node.exe D:\Work Program\yarn\bin\yarn.js install
+
+PATH: 
+  C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;D:\java\jdk1.8.0_45\bin;D:\Work Program\TortoiseSVN\bin;C:\Users\liyaoxu\.dnx\bin;D:\SDK\\platform-tools;C:\Users\liyaoxu\.gradle\wrapper\dists\gradle-3.3-all\55gk2rcmfc6p2dg9u9ohc3hw9\gradle-3.3\\bin;D:\Program Files\mysql\\bin;D:\SDK\ndk-bundle;D:\SDK\\tools;D:\Program Files\GTK2-Runtime\bin;C:\Program Files (x86)\GtkSharp\2.12\bin;D:\java\jdk1.8.0_45\jre\bin;C:\Program Files\Common Files\Autodesk Shared\;D:\tools\WinSCP\;E:\MSVN\SVNServer\bin;D:\Work Program\nexus-3.9.0-01-win64\nexus-3.9.0-01\bin;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;D:\Work Program\Microsoft VS Code\bin;D:\Work Program\node-v12.11.1-win-x64;D:\Work Program\yarn\bin\;C:\Program Files\WinRAR;C:\Program Files\WinZip;D:\Work Program\Python38;D:\Work Program\Python38\Scripts;D:\Work Program\Python38\Lib\site-packages;E:\MyTestSpace\GISPostStgSpace\OSM_STACK\pgsql\bin;%MAPNIKHOME%\lib;%MAPNIKHOME%\bin;D:\Work Program\Pandoc\;D:\Work Program\Git\cmd;D:\Work Program\TortoiseGit\bin;C:\Users\liyaoxu\AppData\Local\Microsoft\WindowsApps;c:\program files\esafenet\cobra docguard client;D:\QtTools\5.4\mingw491_32\bin;D:\Work Program\Microsoft VS Code\bin;D:\Work Program\Egret Wing 3\bin;C:\Users\liyaoxu\AppData\Roaming\npm;C:\Users\liyaoxu\AppData\Local\Yarn\bin;C:\Users\liyaoxu\AppData\Local\BypassRuntm
+
+Yarn version: 
+  1.9.4
+
+Node version: 
+  12.11.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  SyntaxError: E:\MyTestSpace\ToyBrower\package.json: Unexpected token } in JSON at position 236
+      at JSON.parse (<anonymous>)
+      at D:\Work Program\yarn\lib\cli.js:1130:59
+      at Generator.next (<anonymous>)
+      at step (D:\Work Program\yarn\lib\cli.js:92:30)
+      at D:\Work Program\yarn\lib\cli.js:103:13
+
+npm manifest: 
+  {
+    "name": "test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server/app.js",
+    "devDependencies": {
+      "babel-cli": "^6.26.0",
+      "babel-core": "^6.26.3",
+      "babel-eslint": "^8.0.1",
+      "babel-preset-env": "^1.7.0",
+    },
+    "scripts": {
+      "start": "node server/app.js",
+      "build": ".\\node_modules\\.bin\\babel-node src/index.js",
+      "test": ".\\node_modules\\.bin\\babel-node src/test.js"
+    },
+    "dependencies": {},
+    "author": "",
+    "license": "ISC"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
