@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TicTacToc</title>
+  <style>
+    #step {
+      position: absolute;
+      top: 0;
+    }
+
+    #result {
+      color: red;
+      text-align: center;
+      height: 60px;
+      font-size: 32px;
+
+      font-size: 30px;
+      line-height: 60px;
+    }
+
+    #ttt {
+      text-align: center;
+      margin: 20px auto;
+      ;
+    }
+
+    .cell {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      width: 100px;
+      height: 100px;
+      border: 1px solid #fff;
+      background-color: green;
+
+      line-height: 100px;
+      font-size: 50px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .active {
+      background-color: goldenrod;
+    }
+
+    .action-list {
+      text-align: center;
+    }
+
+    button {
+      font-size: 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="result"></div>
+  <div id="ttt"></div>
+  <div class="action-list">
+    <button onclick="replay()">重玩</button>
+  </div>
+  <div id="step"></div>
+</body>
+
+<script>
+
+  let pattern,
+    color,
+    currentNode,
+    winner,
+    steps;
+
+  function replay() {
+    pattern = [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0]
+    ];
+
+    color = 1;
+    currentNode = [];
+    winner = '';
+    steps = [];
+    document.getElementById('result').innerHTML = '';
+    show();
+  }
+  replay();
+
+  function show() {
+    const container = document.getElementById('ttt');
+
+    container.innerHTML = '';
+    const [cx, cy] = currentNode;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        let cell = document.createElement('div');
+        cell.classList.add('cell');
+
+        if (cx === i && cy === j) {
+          cell.classList.add('active');
+        }
+
+        cell.innerText =
+          pattern[i][j] === 2 ? '○' :    // 2 - ○
+            pattern[i][j] === 1 ? '×' :    // 1 - ×
+              '';
+
+        cell.addEventListener('click', () => userMove(i, j));
+
+        container.appendChild(cell);
+      }
+      container.appendChild(document.createElement('br'));
+    }
+
+    // 显示步骤
+    document.getElementById('step').innerHTML = steps.map(step => {
+      const player = step.color === 2 ? '○' :
+        step.color === 1 ? '×' :
+          '';
+      return player + ': (' + step.y + ',' + step.x + ')';
+    }).join('<br/>');
+  }
+
+  function userMove(x, y) {
+    if (pattern[x][y] || winner) return;  // 已经落子或已经结束
+    steps.push({
+      x,
+      y,
+      color
+    });
+    currentNode = [x, y];
+    pattern[x][y] = color;
+
+    if (check(pattern, color, x, y)) {
+      winner = color;
+      document.getElementById('result').innerText =
+        color === 2 ? '○ 获得胜利' :
+          color === 1 ? '  × 获得胜利' :
+            '系统错误';
+    }
+    show();
+    color = 3 - color;
+    computerMove();
+  }
+
+  function computerMove() {
+    let choise = bestChoice(pattern, color);
+    let x, y;
+    if (choise.point) {
+      [x, y] = choise.point;
+      currentNode = [x, y];
+      steps.push({
+        x,
+        y,
+        color
+      });
+      pattern[x][y] = color;
+      if (check(pattern, color, x, y)) {
+        winner = color;
+        document.getElementById('result').innerText =
+          color === 2 ? '○ 获得胜利' :
+            color === 1 ? '恭喜 × 获得胜利' :
+              '系统错误';
+      }
+    }
+    show();
+    color = 3 - color;
+  }
+
+  function check(pattern, color, x, y) {
+    if (winner || !pattern[x][y]) return;
+
+    // 判断横
+    if (
+      pattern[x][y] === pattern[(x + 1) % 3][y] &&
+      pattern[x][y] === pattern[(x + 2) % 3][y]
+    ) {
+      return true;
+    }
+
+    // 判断竖
+    if (
+      pattern[x][y] === pattern[x][(y + 1) % 3] &&
+      pattern[x][y] === pattern[x][(y + 2) % 3]
+    ) {
+      return true;
+    }
+
+    // 判断对角
+    if (!((x + y) % 2)) {
+      if (x === y) {
+        // “\”对角线
+        if (
+          pattern[1][1] === pattern[0][0] &&
+          pattern[1][1] === pattern[2][2]) return true;
+      }
+
+      if (x + y === 2) {
+        // “/”对角线 
+        if (
+          pattern[1][1] === pattern[2][0] &&
+          pattern[1][1] === pattern[0][2]) return true;
+      }
+    }
+    return false;
+
+    /*
+          for (let i = 0; i < 3; i++) {
+              let win = true; // &&:true, ||:false, +:0, *:1
+              for (let j = 0; j < 3; j++) {
+                  if (pattern[i][j] !== color) {
+                      win = false;
+                      break;
+                  } 
+              }
+              if (win) {
+                  return true;
+              }
+          }
+          for (let i = 0; i < 3; i++) {
+              let win = true; // &&:true, ||:false, +:0, *:1
+              for (let j = 0; j < 3; j++) {
+                  if (pattern[j][i] !== color) {
+                      win = false;
+                      break;
+                  } 
+              }
+              if (win) {
+                  return true;
+              }
+          }
+          {
+              let win = true; // &&:true, ||:false, +:0, *:1
+              for (let i = 0; i < 3; i++) {
+                  if (pattern[i][i] !== color) {
+                      win = false;
+                      break;
+                  } 
+              }
+              if (win) {
+                  return true;
+              }
+          }
+          {
+              let win = true; // &&:true, ||:false, +:0, *:1
+              for (let i = 0; i < 3; i++) {
+                  if (pattern[i][2-i] !== color) {
+                      win = false;
+                      break;
+                  } 
+              }
+              if (win) {
+                  return true;
+              }
+          }
+          return false;
+    */
+  }
+
+  // function clone (pattern) {
+  //     return JSON.parse(JSON.stringify(pattern));
+  // }
+
+  function willWin(pattern, color) {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (pattern[i][j] !== 0)
+          continue;
+        // let tmp = clone(pattern);
+        pattern[i][j] = color;
+        if (check(pattern, color, i, j)) {
+          pattern[i][j] = 0;
+          return [i, j];
+        }
+        pattern[i][j] = 0;
+      }
+    }
+    return null;
+  }
+
+  // let openings = new Map();
+  // openings.set([
+  //     [0, 0, 0],
+  //     [0, 0, 0],
+  //     [0, 0, 0]
+  // ].toString() + '1', {
+  //     point: [1, 1],
+  //     result: 0
+  // });
+
+  function bestChoice(pattern, color) {
+    // if (openings.has(pattern.toString() + color )) {
+    //     return openings.get(pattern.toString() + color);
+    // } 
+    let point = willWin(pattern, color);
+    if (point) {
+      return {
+        point,
+        result: 1
+      }
+    }
+
+    let result = -1;
+
+    outer: for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (pattern[i][j] !== 0)
+          continue;
+
+        // let tmp = clone(pattern);
+        pattern[i][j] = color;
+
+        let opposite = bestChoice(pattern, 3 - color);
+        pattern[i][j] = 0;
+        // todo 随机选择一种
+        if (0 - opposite.result >= result) {
+          point = [i, j];
+          result = 0 - opposite.result
+        }
+        if (result === 1) { // 输赢剪枝
+          break outer;
+        }
+      }
+    }
+
+    return {
+      point,
+      result: point ? result : 0
+    }
+  }
+</script>
+
+</html>
