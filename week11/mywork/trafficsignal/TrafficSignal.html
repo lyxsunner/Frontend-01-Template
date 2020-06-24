@@ -1,0 +1,138 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="./css/digits.css">
+</head>
+<style>
+    body {
+        margin: 0;
+    }
+
+    .content {
+        width: 100%;
+        height: 100%;
+        background: antiquewhite;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .light-background {
+        height: 100px;
+        width: 400px;
+        background: black;
+        border-radius: 45px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .light-ball {
+        width: 60px;
+        height: 60px;
+        border-radius: 60px;
+        background: gray;
+        margin: 20px;
+    }
+
+    .light-ball.red {
+        background: red;
+    }
+
+    .light-ball.orange {
+        background: orange;
+    }
+
+    .light-ball.green {
+        background: green;
+    }
+</style>
+
+<body>
+    <div class="content">
+        <div class="light">
+            <div class="digits"></div>
+        </div>
+        <div class="light-background">
+            <div class="light-ball"></div>
+            <div class="light-ball"></div>
+            <div class="light-ball"></div>
+        </div>
+
+    </div>
+    <script>
+        function initBackground() {
+            document.querySelectorAll('.light-ball').forEach(function (ele) {
+                ele.className = 'light-ball';
+            })
+        }
+
+        var TimerUtil = {
+            currentTime: 0,
+            timer: undefined,
+            clocknum: function (num) {
+                document.querySelector('.digits').innerHTML = '';
+                var html = '';
+                var strarr = num.toString().split('');
+                var digit_to_name = 'zero one two three four five six seven eight nine'.split(' ');
+                for (var i = 0; i < strarr.length; i++) {
+                    if (strarr[i] == '.') {
+                        html += '<div class="dot"></div>'
+                    } else {
+                        var clasname = digit_to_name[strarr[i]];
+                        html += '<div class="' + clasname + '">' +
+                            '<span class="d1"></span>' +
+                            '<span class="d2"></span>' +
+                            '<span class="d3"></span>' +
+                            '<span class="d4"></span>' +
+                            '<span class="d5"></span>' +
+                            '<span class="d6"></span>' +
+                            '<span class="d7"></span>' +
+                            '</div>';
+                    }
+                }
+                document.querySelector('.digits').innerHTML = html;
+            },
+            refreshTimer: function () {
+                if (this.currentTime >= 0) {
+                    if (this.currentTime <= 9) {
+                        this.clocknum('0' + this.currentTime);
+                    } else {
+                        this.clocknum(this.currentTime);
+                    }
+                    this.currentTime--;
+                } else {
+                    clearInterval(this.timer);
+                    currentIndex++;
+                    if (this.callBack) {
+                        this.callBack();
+                    }
+                    this.startCount(timerCountList[currentIndex % 3], this.callBack)
+                }
+            },
+            startCount: function (count, callBack) {
+                this.currentTime = count;
+                this.callBack = callBack;
+                this.refreshTimer.apply(this);
+                this.timer = setInterval(this.refreshTimer.bind(this), 1000);
+            }
+        }
+
+        var timerCountList = [5, 2, 10];
+        var colorList = ['red', 'orange', 'green'];
+        var currentIndex = 0;
+
+        function activeLight() {
+            initBackground();
+            var currentLight = document.querySelectorAll('.light-ball')[currentIndex % 3];
+            currentLight.className += " " + colorList[currentIndex % 3];
+        }
+
+        (function () {
+            activeLight();
+            TimerUtil.startCount(timerCountList[currentIndex % 3], activeLight);
+        })()
+    </script>
+</body>
+
+</html>

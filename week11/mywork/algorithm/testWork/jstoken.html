@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jstoken</title>
+    <style>
+        .keywords {
+            color: blue;
+        }
+
+        .punctuator {
+            color: blueviolet;
+        }
+
+        .identifier {
+            color: skyblue;
+        }
+    </style>
+</head>
+
+<body>
+    <pre id="container"></pre>
+    <script>
+        //exec 对一个长文字依次的匹配，比match test更适合
+        //配合async await 做 显示进度条 等
+        var source = `function sleep(t) {
+        return new Promise((resolve, reject) => {
+          setTimeout(resolve, t);
+        });
+      }`;
+
+        // 这个正则可以包含所有javascript词法规则
+        var regexp = /(function|new|return)|([ \t\n\r]+)|([a-zA-Z][a-zA-Z0-9]*)|(\(\)\{\}\,\;)/g;
+
+        var dictionary = ["keywords", "whitespace", "identifier", "punctuator"];
+
+        var token = null;
+        var lastIndex = 0;
+
+        var container = document.getElementById("container");
+
+        do {
+            //起始点
+            lastIndex = regexp.lastIndex;
+            token = regexp.exec(source);
+            if (!token) break;
+            let text = document.createElement("span");
+            text.textContent = token[0];
+
+            for (var i = 1; i < 5; i++) {
+                if (token[i]) {
+                    text.classList.add(dictionary[i - 1]);
+                }
+                container.appendChild(text);
+            }
+        } while (token);
+    </script>
+</body>
+
+</html>
