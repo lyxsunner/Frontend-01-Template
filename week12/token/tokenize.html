@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -webkit-pictograph;
+    }
+
+    #source {
+      font-size: 64px;
+      font-weight: 700;
+    }
+
+    #source .active {
+      color: #f40;
+    }
+
+    #stack {
+      display: flex;
+    }
+
+    #stack pre {
+      margin-right: 10px;
+      background: #eee;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <span id="source"></span>
+  </div>
+  <div id="stack">
+
+  </div>
+</body>
+<script src="./tokenize.js"></script>
+<script>
+  const $source = document.getElementById('source');
+  const $stack = document.getElementById('stack');
+  const source = '0  +  1 * (2 + 3) * 4';
+  $source.innerHTML = source.split('').map(c => `<span>${c}</span>`).join('');
+
+  function sleep(t) {
+    return new Promise(resolve => setTimeout(resolve, t));
+  }
+
+  (async function () {
+    let k = 0;
+    let result = AST(source);
+    let next = result.next();
+    while (!next.done) {
+      let { stack, token } = next.value;
+      $stack.innerHTML = stack.map(item => `<pre>${JSON.stringify(item, null, ' ')}</pre>`).join(' ');
+      while (k <= token.index) {
+        $source.children[k++].classList.add('active');
+      }
+      await sleep(500);
+      next = result.next();
+    }
+    // document.getElementById('result').innerHTML = next.value ? '⭕' : '❌';
+  }())
+</script>
+
+</html>
