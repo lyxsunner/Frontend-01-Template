@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>drag</title>
+</head>
+
+<body>
+  <div id="container">
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字
+    <div id="drag" style="width: 100px;height: 100px;background-color: pink;display: inline-block;"></div>
+  </div>
+  <script>
+    let ranges = [];
+    let container = document.getElementById('container');
+    for (let i = 0; i < container.childNodes[0].textContent.length; i++) {
+      let range = document.createRange();
+      range.setStart(container.childNodes[0], i);
+      range.setEnd(container.childNodes[0], i);
+      ranges.push(range);
+    }
+
+    function nearest(x0, y0) {
+      let nearestRange = null;
+      let distance = Infinity;
+
+      for (let range of ranges) {
+        let { left, top } = range.getBoundingClientRect();
+        let d = (x0 - left) ** 2 + (y0 - top) ** 2;
+        if (d < distance) {
+          nearestRange = range;
+          distance = d;
+        }
+      }
+
+      return nearestRange;
+
+    }
+
+    function throttle(func, delay) {
+      var prev = Date.now();
+      return function () {
+        var context = this;
+        var args = arguments;
+        var now = Date.now();
+        if (now - prev >= delay) {
+          func.apply(context, args);
+          prev = Date.now();
+        }
+      }
+    }
+
+    document.addEventListener('selectstart', event => event.preventDefault())
+
+
+    let drag = document.getElementById("drag");
+    let baseX = 0, baseY = 0;
+    drag.addEventListener("mousedown", event => {
+      let startX = event.clientX, startY = event.clientY;
+
+      let move = event => {
+        let range = nearest(event.clientX, event.clientY);
+        if(range){
+         range.insertNode(drag);
+        }
+      }
+
+      let up = event => {
+        baseX = baseX + event.clientX - startX, baseY = baseY + event.clientY - startY;
+        document.removeEventListener("mousemove", move);
+        document.removeEventListener("mouseup", up);
+      }
+
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
+    })
+  </script>
+</body>
+
+</html>
