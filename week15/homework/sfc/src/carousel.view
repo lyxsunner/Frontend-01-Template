@@ -1,0 +1,10 @@
+<template>
+    <div>
+        <!-- <img /> -->
+    </div>
+</template>
+<script>
+export default {
+    el: '#id',
+}
+</script>
